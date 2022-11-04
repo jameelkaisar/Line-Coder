@@ -22,6 +22,16 @@ class Decoder {
 
     vector<int> NRZ_I(vector<int> bits) {
         vector<int> result;
+        int prev = 1;
+        for (auto b: bits) {
+            if (b == prev) {
+                result.push_back(0);
+            }
+            else {
+                result.push_back(1);
+            }
+            prev = b;
+        }
         return result;
     }
 
