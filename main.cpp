@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "./src/prompt.h"
+#include "./src/prompt/prompt.h"
 
 using namespace std;
 
