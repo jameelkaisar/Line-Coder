@@ -10,6 +10,13 @@ class Decoder {
 
     vector<int> NRZ_L(vector<int> bits) {
         vector<int> result;
+        for (auto b: bits) {
+            if (b == 1) {
+                result.push_back(1);
+            } else {
+                result.push_back(0);
+            }
+        }
         return result;
     }
 
