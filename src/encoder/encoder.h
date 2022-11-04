@@ -22,6 +22,16 @@ class Encoder {
 
     vector<int> NRZ_I(vector<int> bits) {
         vector<int> result;
+        bool flag = true;
+        for (auto b: bits) {
+            if (b == 1) {
+                result.push_back(flag ? -1 : 1);
+                flag = !flag;
+            }
+            else {
+                result.push_back(flag ? 1 : -1);
+            }
+        }
         return result;
     }
 
