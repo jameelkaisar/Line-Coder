@@ -49,17 +49,6 @@ class Encoder {
         return result;
     }
 
-// bool flag = true;
-// for (auto b: bits) {
-//     if (b == 1) {
-//         result.push_back(flag ? -1 : 1);
-//         flag = !flag;
-//     }
-//     else {
-//         result.push_back(flag ? 1 : -1);
-//     }
-// }
-
     vector<int> Differential_Manchester(vector<int> bits) {
         vector<int> result;
         bool flag = true;
