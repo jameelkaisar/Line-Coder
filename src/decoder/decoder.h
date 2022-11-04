@@ -52,6 +52,18 @@ class Decoder {
 
     vector<int> Differential_Manchester(vector<int> bits) {
         vector<int> result;
+        bool flag = true;
+        int prev = 1;
+        for (auto b: bits) {
+            flag = !flag;
+            if (flag) continue;
+            if (b == prev) {
+                result.push_back(1);
+                prev *= -1;
+            } else {
+                result.push_back(0);
+            }
+        }
         return result;
     }
 
