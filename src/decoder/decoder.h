@@ -69,6 +69,14 @@ class Decoder {
 
     vector<int> AMI(vector<int> bits) {
         vector<int> result;
+        for (auto b: bits) {
+            if (b == 0) {
+                result.push_back(0);
+            }
+            else {
+                result.push_back(1);
+            }
+        }
         return result;
     }
 };
