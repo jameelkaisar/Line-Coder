@@ -37,6 +37,16 @@ class Decoder {
 
     vector<int> Manchester(vector<int> bits) {
         vector<int> result;
+        bool flag = true;
+        for (auto b: bits) {
+            flag = !flag;
+            if (flag) continue;
+            if (b == 1) {
+                result.push_back(0);
+            } else {
+                result.push_back(1);
+            }
+        }
         return result;
     }
 
