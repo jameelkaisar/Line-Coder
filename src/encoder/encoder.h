@@ -68,6 +68,16 @@ class Encoder {
 
     vector<int> AMI(vector<int> bits) {
         vector<int> result;
+        int flag = true;
+        for (auto b: bits) {
+            if (b == 1) {
+                result.push_back(flag ? 1 : -1);
+                flag = !flag;
+            }
+            else {
+                result.push_back(0);
+            }
+        }
         return result;
     }
 };
