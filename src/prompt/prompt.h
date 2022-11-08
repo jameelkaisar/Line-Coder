@@ -73,6 +73,7 @@ class Prompt {
             if (choice == 1) handle_encoder();
             if (choice == 2) handle_decoder();
             if (choice == 3) handle_plotter();
+            cout<<endl;
         }
     }
 
@@ -125,14 +126,35 @@ class Prompt {
         execute_plotter(bits, plotter);
     }
 
-    void execute_encoder(vector<int> bits, int decoder, bool scrambling, int scrambler, bool plotting, pair<string, int> plotter) {
-        cout << "Execute Encoder" << endl;
-        cout << endl;
+    void execute_encoder(vector<int> bits, int encoder, bool scrambling, int scrambler, bool plotting, pair<string, int> plotter) {
+        Encoder e;
+        Scrambler s;
+        cout << "Encoder Result:" << endl;
+        cout << "Input Bits: " << to_stringv(bits)<<endl;
+        vector<int> output_bits = bits;
+        output_bits = (e.*encoding_scheme[encoder].second)(output_bits);
+        cout << "Encoded Bits: " << to_stringv(output_bits)<<endl;
+        if (scrambling) {
+            output_bits = (s.*scrambling_scheme[scrambler].second)(output_bits);
+            cout << "Scrambled Bits: " << to_stringv(output_bits)<<endl;
+        }
+        if (plotting) {
+            execute_plotter(output_bits, plotter);
+        }
     }
 
     void execute_decoder(vector<int> bits, int decoder, bool unscrambling, int unscrambler) {
-        cout << "Execute Decoder" << endl;
-        cout << endl;
+        Decoder d;
+        Unscrambler u;
+        cout << "Decoder Result:" << endl;
+        cout << "Input Bits: " << to_stringv(bits)<<endl;
+        vector<int> output_bits = bits;
+        if (unscrambling) {
+            output_bits = (u.*unscrambling_scheme[unscrambler].second)(output_bits);
+            cout << "Uncrambled Bits: " << to_stringv(output_bits)<<endl;
+        }
+        output_bits = (d.*decoding_scheme[decoder].second)(output_bits);
+        cout << "Decoded Bits: " << to_stringv(output_bits)<<endl;
     }
 
     void execute_plotter(vector<int> bits, pair<string, int> plotter) {
@@ -140,11 +162,9 @@ class Prompt {
         string fullname = plotter.first + "." + plotter_formats[plotter.second];
         p.plot(bits, fullname);
         cout << "Plot saved successfully!" << endl;
-        cout << endl;
     }
 
     vector<int> get_bits() {
-        cout << endl;
         int n;
         while (true) {
             cout << "Enter No. of Values (n):" << endl;
