@@ -13,11 +13,12 @@ class Scrambler {
         int zc = 0;
         bool flag = true;
         for (auto x : bits) {
-            result.push_back(x);
             if (x != 0) {
+                result.push_back(flag ? 1 : -1);
                 zc = 0;
-                flag = x > 0;
+                flag = !flag;
             } else {
+                result.push_back(0);
                 zc++;
             }
             if (zc == 8) {
