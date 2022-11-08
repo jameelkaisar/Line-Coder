@@ -102,7 +102,7 @@ class Prompt {
         if (scrambling)
             scrambler = get_scrambler();
         bool plotting = do_plotting();
-        int plotter = 0;
+        pair<string, int> plotter = {"", 0};
         if (plotting)
             plotter = get_plotter();
         execute_encoder(bits, encoder, scrambling, scrambler, plotting, plotter);
@@ -121,12 +121,11 @@ class Prompt {
     void handle_plotter(vector<int> bits = {}) {
         if (bits.size() == 0)
             bits = get_bits();
-        string filename = get_filename();
-        int fileformat = get_fileformat();
-        execute_plotter(bits, filename, fileformat);
+        pair<string, int> plotter = get_plotter();
+        execute_plotter(bits, plotter);
     }
 
-    void execute_encoder(vector<int> bits, int decoder, bool scrambling, int scrambler, bool plotting, int plotter) {
+    void execute_encoder(vector<int> bits, int decoder, bool scrambling, int scrambler, bool plotting, pair<string, int> plotter) {
         cout << "Execute Encoder" << endl;
         cout << endl;
     }
@@ -136,76 +135,187 @@ class Prompt {
         cout << endl;
     }
 
-    void execute_plotter(vector<int> bits, string filename, int fileformat) {
+    void execute_plotter(vector<int> bits, pair<string, int> plotter) {
         Plotter p;
-        string fullname = filename + "." + plotter_formats[fileformat];
+        string fullname = plotter.first + "." + plotter_formats[plotter.second];
         p.plot(bits, fullname);
         cout << "Plot saved successfully!" << endl;
+        cout << endl;
     }
 
     vector<int> get_bits() {
-        cout << "Get Bits" << endl;
         cout << endl;
-        return {};
+        int n;
+        while (true) {
+            cout << "Enter No. of Values (n):" << endl;
+            cout << ">> ";
+            cin >> n;
+            if (n > 0) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
+        vector<int> v;
+        while (n--) {
+            int x;
+            cout << "    >> ";
+            cin >> x;
+            v.push_back(x);
+        }
+        cout << endl;
+        return v;
     }
 
     int get_encoder() {
-        cout << "Get Encoder" << endl;
+        int choice;
+        while (true) {
+            cout << "Choose an encoder:" << endl;
+            for (auto x : encoding_scheme) {
+                cout << x.first << ". " << x.second.first << endl;
+            }
+            cout << ">> ";
+            cin >> choice;
+            if (encoding_scheme.find(choice) != encoding_scheme.end()) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return 0;
+        return choice;
     }
 
     int get_decoder() {
-        cout << "Get Decoder" << endl;
+        int choice;
+        while (true) {
+            cout << "Choose a decoder:" << endl;
+            for (auto x : decoding_scheme) {
+                cout << x.first << ". " << x.second.first << endl;
+            }
+            cout << ">> ";
+            cin >> choice;
+            if (decoding_scheme.find(choice) != decoding_scheme.end()) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return 0;
+        return choice;
     }
 
     bool do_scrambling() {
-        cout << "Do Scrambling" << endl;
+        int choice;
+        while (true) {
+            cout << "Do you want to scramble the data?" << endl;
+            cout << "1. Yes" << endl;
+            cout << "2. No" << endl;
+            cout << ">> ";
+            cin >> choice;
+            if (choice == 1 || choice == 2) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return false;
+        return choice == 1;
     }
 
     int get_scrambler() {
-        cout << "Get Scrambler" << endl;
+        int choice;
+        while (true) {
+            cout << "Choose a scrambler:" << endl;
+            for (auto x : scrambling_scheme) {
+                cout << x.first << ". " << x.second.first << endl;
+            }
+            cout << ">> ";
+            cin >> choice;
+            if (scrambling_scheme.find(choice) != scrambling_scheme.end()) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return 0;
+        return choice;
     }
 
     bool do_unscrambling() {
-        cout << "Do Unscrambling" << endl;
+        int choice;
+        while (true) {
+            cout << "Do you want to unscramble the data?" << endl;
+            cout << "1. Yes" << endl;
+            cout << "2. No" << endl;
+            cout << ">> ";
+            cin >> choice;
+            if (choice == 1 || choice == 2) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return false;
+        return choice == 1;
     }
 
     int get_unscrambler() {
-        cout << "Get Unscrambler" << endl;
+        int choice;
+        while (true) {
+            cout << "Choose an unscrambler:" << endl;
+            for (auto x : unscrambling_scheme) {
+                cout << x.first << ". " << x.second.first << endl;
+            }
+            cout << ">> ";
+            cin >> choice;
+            if (unscrambling_scheme.find(choice) != unscrambling_scheme.end()) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return 0;
+        return choice;
     }
 
     bool do_plotting() {
-        cout << "Do Plotting" << endl;
+        int choice;
+        while (true) {
+            cout << "Do you want to plot the data?" << endl;
+            cout << "1. Yes" << endl;
+            cout << "2. No" << endl;
+            cout << ">> ";
+            cin >> choice;
+            if (choice == 1 || choice == 2) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return false;
+        return choice == 1;
     }
 
-    int get_plotter() {
-        cout << "Get Plotter" << endl;
-        cout << endl;
-        return 0;
+    pair<string, int> get_plotter() {
+        string filename = get_filename();
+        int fileformat = get_fileformat();
+        return {filename, fileformat};
     }
 
     string get_filename() {
-        cout << "Get Filename" << endl;
+        string filename;
+        cin.ignore();
+        while (true) {
+            cout << "Enter a filename:" << endl;
+            cout << ">> ";
+            getline(cin, filename);
+            if (filename.size() > 0) break;
+            cout << "Enter a valid filename!" << endl
+                 << endl;
+        }
         cout << endl;
-        return "";
+        return filename;
     }
 
     int get_fileformat() {
-        cout << "Get Fileformat" << endl;
+        int choice;
+        while (true) {
+            cout << "Choose an output format:" << endl;
+            for (auto x : plotter_formats) {
+                cout << x.first << ". " << x.second << endl;
+            }
+            cout << ">> ";
+            cin >> choice;
+            if (plotter_formats.find(choice) != plotter_formats.end()) break;
+            cout << "Enter a valid choice!" << endl
+                 << endl;
+        }
         cout << endl;
-        return 0;
+        return choice;
     }
 };
