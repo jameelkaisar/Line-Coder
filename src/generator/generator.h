@@ -9,7 +9,7 @@ class Generator {
         srand(time(0));
     }
 
-    vector<int> getRandom(int n = 256) {
+    vector<int> getRandom(int n = 256, int ph = 0) {
         vector<int> result;
         for (int i = 0; i < n; i++) {
             result.push_back(rand() % 2);
