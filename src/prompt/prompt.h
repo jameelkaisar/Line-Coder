@@ -73,7 +73,7 @@ class Prompt {
             if (choice == 1) handle_encoder();
             if (choice == 2) handle_decoder();
             if (choice == 3) handle_plotter();
-            cout<<endl;
+            cout << endl;
         }
     }
 
@@ -130,13 +130,13 @@ class Prompt {
         Encoder e;
         Scrambler s;
         cout << "Encoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits)<<endl;
+        cout << "Input Bits: " << to_stringv(bits) << endl;
         vector<int> output_bits = bits;
         output_bits = (e.*encoding_scheme[encoder].second)(output_bits);
-        cout << "Encoded Bits: " << to_stringv(output_bits)<<endl;
+        cout << "Encoded Bits: " << to_stringv(output_bits) << endl;
         if (scrambling) {
             output_bits = (s.*scrambling_scheme[scrambler].second)(output_bits);
-            cout << "Scrambled Bits: " << to_stringv(output_bits)<<endl;
+            cout << "Scrambled Bits: " << to_stringv(output_bits) << endl;
         }
         if (plotting) {
             execute_plotter(output_bits, plotter);
@@ -147,14 +147,14 @@ class Prompt {
         Decoder d;
         Unscrambler u;
         cout << "Decoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits)<<endl;
+        cout << "Input Bits: " << to_stringv(bits) << endl;
         vector<int> output_bits = bits;
         if (unscrambling) {
             output_bits = (u.*unscrambling_scheme[unscrambler].second)(output_bits);
-            cout << "Uncrambled Bits: " << to_stringv(output_bits)<<endl;
+            cout << "Uncrambled Bits: " << to_stringv(output_bits) << endl;
         }
         output_bits = (d.*decoding_scheme[decoder].second)(output_bits);
-        cout << "Decoded Bits: " << to_stringv(output_bits)<<endl;
+        cout << "Decoded Bits: " << to_stringv(output_bits) << endl;
     }
 
     void execute_plotter(vector<int> bits, pair<string, int> plotter) {
