@@ -1,5 +1,5 @@
-# Line-Coding
-Line coding encoder, decoder and scrambler with digital data generator and graph plotter.
+# Line-Coder
+Line encoder, decoder and scrambler with digital data generator and graph plotter.
 
 ## Setup
 - Install gnuplot
@@ -19,8 +19,8 @@ sudo cmake --build . --target install
 
 ## Usage
 ```
-git clone https://github.com/JameelKaisar/Line-Coding.git
-cd Line-Coding
+git clone https://github.com/JameelKaisar/Line-Coder.git
+cd Line-Coder
 g++ -std=c++17 main.cpp -o main.out
 ./main.out
 ```
