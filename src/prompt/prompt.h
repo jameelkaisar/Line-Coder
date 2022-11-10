@@ -28,10 +28,6 @@ class Prompt {
 
    public:
     Prompt() {
-        generating_scheme = {
-            {2, {"getRandom", &Generator::getRandom}},
-            {3, {"getRandomWithZeros", &Generator::getRandomWithZeros}},
-            {4, {"getRandomWithOnes", &Generator::getRandomWithOnes}}};
         encoding_scheme = {
             {1, {"NRZ_L", &Encoder::NRZ_L}},
             {2, {"NRZ_I", &Encoder::NRZ_I}},
@@ -110,10 +106,13 @@ class Prompt {
             bits = handle_generate(false);
         }
         int encoder = get_encoder();
-        bool scrambling = do_scrambling();
+        bool scrambling = false;
         int scrambler = 0;
-        if (scrambling)
-            scrambler = get_scrambler();
+        if (encoding_scheme[encoder].first == "AMI") {
+            scrambling = do_scrambling();
+            if (scrambling)
+                scrambler = get_scrambler();
+        }
         bool plotting = do_plotting();
         pair<string, int> plotter = {"", 0};
         if (plotting)
@@ -133,10 +132,13 @@ class Prompt {
         else
             bits = input;
         int decoder = get_decoder();
-        bool unscrambling = do_unscrambling();
+        bool unscrambling = false;
         int unscrambler = 0;
-        if (unscrambling)
-            unscrambler = get_unscrambler();
+        if (decoding_scheme[decoder].first == "AMI") {
+            unscrambling = do_unscrambling();
+            if (unscrambling)
+                unscrambler = get_unscrambler();
+        }
         execute_decoder(bits, decoder, unscrambling, unscrambler);
     }
 
@@ -160,14 +162,13 @@ class Prompt {
         Encoder e;
         Scrambler s;
         cout << "Encoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits) << endl;
-        vector<int> output_bits = bits;
-        output_bits = (e.*encoding_scheme[encoder].second)(output_bits);
-        cout << "Encoded Bits: " << to_stringv(output_bits) << endl;
-        if (scrambling) {
-            output_bits = (s.*scrambling_scheme[scrambler].second)(output_bits);
-            cout << "Scrambled Bits: " << to_stringv(output_bits) << endl;
-        }
+        cout << "Input Bits: " << to_stringv(bits, " ") << endl;
+        vector<int> output_bits;
+        if (!scrambling)
+            output_bits = (e.*encoding_scheme[encoder].second)(bits);
+        else
+            output_bits = (s.*scrambling_scheme[scrambler].second)(bits);
+        cout << "Encoded Bits: " << to_stringv(output_bits, " ") << endl;
         if (plotting) {
             execute_plotter(output_bits, plotter);
         }
@@ -179,14 +180,13 @@ class Prompt {
         Decoder d;
         Unscrambler u;
         cout << "Decoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits) << endl;
-        vector<int> output_bits = bits;
-        if (unscrambling) {
-            output_bits = (u.*unscrambling_scheme[unscrambler].second)(output_bits);
-            cout << "Uncrambled Bits: " << to_stringv(output_bits) << endl;
-        }
-        output_bits = (d.*decoding_scheme[decoder].second)(output_bits);
-        cout << "Decoded Bits: " << to_stringv(output_bits) << endl;
+        cout << "Input Bits: " << to_stringv(bits, " ") << endl;
+        vector<int> output_bits;
+        if (!unscrambling)
+            output_bits = (d.*decoding_scheme[decoder].second)(bits);
+        else
+            output_bits = (u.*unscrambling_scheme[unscrambler].second)(bits);
+        cout << "Decoded Bits: " << to_stringv(output_bits, " ") << endl;
     }
 
     vector<int> execute_generator(int generator, int nbits, int consecutive, bool print) {
@@ -313,7 +313,7 @@ class Prompt {
     bool do_unscrambling() {
         int choice;
         while (true) {
-            cout << "Do you want to unscramble the data?" << endl;
+            cout << "Is the data scrambled?" << endl;
             cout << "1. Yes" << endl;
             cout << "2. No" << endl;
             cout << ">> ";
