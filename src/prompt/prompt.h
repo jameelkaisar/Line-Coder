@@ -120,8 +120,10 @@ class Prompt {
             plotter = get_plotter();
         vector<int> output_bits = execute_encoder(bits, encoder, scrambling, scrambler, plotting, plotter);
         bool decoding = do_decoding();
-        if (decoding)
+        if (decoding) {
+            cout << endl;
             handle_decoder(output_bits);
+        }
     }
 
     void handle_decoder(vector<int> input = {}) {
@@ -414,7 +416,6 @@ class Prompt {
             cout << "Enter a valid choice!" << endl
                  << endl;
         }
-        cout << endl;
         return choice == 1;
     }
 
