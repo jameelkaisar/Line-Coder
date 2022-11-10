@@ -8,7 +8,7 @@ class Unscrambler {
     Unscrambler() {
     }
 
-    vector<int> HDB3(vector<int> bits) {
+    vector<int> B8ZS(vector<int> bits) {
         vector<int> result;
         bool expect = true;
         int count = 0;
@@ -38,7 +38,7 @@ class Unscrambler {
         return result;
     }
 
-    vector<int> B8ZS(vector<int> bits) {
+    vector<int> HDB3(vector<int> bits) {
         vector<int> result;
         bool expect = true;
         int n = bits.size();

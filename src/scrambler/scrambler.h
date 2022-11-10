@@ -8,7 +8,7 @@ class Scrambler {
     Scrambler() {
     }
 
-    vector<int> HDB3(vector<int> bits) {
+    vector<int> B8ZS(vector<int> bits) {
         vector<int> result;
         int zc = 0;
         bool flag = true;
@@ -33,7 +33,7 @@ class Scrambler {
         return result;
     }
 
-    vector<int> B8ZS(vector<int> bits) {
+    vector<int> HDB3(vector<int> bits) {
         vector<int> result;
         int zc = 0;
         bool flag = true;
