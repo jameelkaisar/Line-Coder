@@ -1,6 +1,4 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <vector>
 
 class Decoder {
    private:
@@ -8,9 +6,9 @@ class Decoder {
     Decoder() {
     }
 
-    vector<int> NRZ_L(vector<int> bits) {
-        vector<int> result;
-        for (auto b: bits) {
+    std::vector<int> NRZ_L(std::vector<int> bits) {
+        std::vector<int> result;
+        for (auto b : bits) {
             if (b == 1) {
                 result.push_back(1);
             } else {
@@ -20,14 +18,13 @@ class Decoder {
         return result;
     }
 
-    vector<int> NRZ_I(vector<int> bits) {
-        vector<int> result;
+    std::vector<int> NRZ_I(std::vector<int> bits) {
+        std::vector<int> result;
         int prev = 1;
-        for (auto b: bits) {
+        for (auto b : bits) {
             if (b == prev) {
                 result.push_back(0);
-            }
-            else {
+            } else {
                 result.push_back(1);
             }
             prev = b;
@@ -35,10 +32,10 @@ class Decoder {
         return result;
     }
 
-    vector<int> Manchester(vector<int> bits) {
-        vector<int> result;
+    std::vector<int> Manchester(std::vector<int> bits) {
+        std::vector<int> result;
         bool flag = true;
-        for (auto b: bits) {
+        for (auto b : bits) {
             flag = !flag;
             if (flag) continue;
             if (b == 1) {
@@ -50,11 +47,11 @@ class Decoder {
         return result;
     }
 
-    vector<int> Differential_Manchester(vector<int> bits) {
-        vector<int> result;
+    std::vector<int> Differential_Manchester(std::vector<int> bits) {
+        std::vector<int> result;
         bool flag = true;
         int prev = 1;
-        for (auto b: bits) {
+        for (auto b : bits) {
             flag = !flag;
             if (flag) continue;
             if (b == prev) {
@@ -67,13 +64,12 @@ class Decoder {
         return result;
     }
 
-    vector<int> AMI(vector<int> bits) {
-        vector<int> result;
-        for (auto b: bits) {
+    std::vector<int> AMI(std::vector<int> bits) {
+        std::vector<int> result;
+        for (auto b : bits) {
             if (b == 0) {
                 result.push_back(0);
-            }
-            else {
+            } else {
                 result.push_back(1);
             }
         }

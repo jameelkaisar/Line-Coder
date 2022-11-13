@@ -1,37 +1,36 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <string>
+#include <vector>
 
 template <typename T>
-string to_stringv(const vector<T>& vec) {
-    typename vector<T>::const_iterator it;
-    string s = "[";
+std::string to_stringv(const std::vector<T>& vec) {
+    typename std::vector<T>::const_iterator it;
+    std::string s = "[";
     for (it = vec.begin(); it != vec.end(); it++) {
         if (it != vec.begin()) s += ", ";
-        if constexpr (is_same_v<T, char> || is_same_v<T, string>)
+        if constexpr (std::is_same_v<T, char> || std::is_same_v<T, std::string>)
             s += *it;
         else
-            s += to_string(*it);
+            s += std::to_string(*it);
     }
     s += "]";
     return s;
 }
 
 template <typename T>
-string to_stringv(const vector<T>& vec, string delim) {
-    typename vector<T>::const_iterator it;
-    string s;
+std::string to_stringv(const std::vector<T>& vec, std::string delim) {
+    typename std::vector<T>::const_iterator it;
+    std::string s;
     for (it = vec.begin(); it != vec.end(); it++) {
         if (it != vec.begin()) s += delim;
-        if constexpr (is_same_v<T, char> || is_same_v<T, string>)
+        if constexpr (std::is_same_v<T, char> || std::is_same_v<T, std::string>)
             s += *it;
         else
-            s += to_string(*it);
+            s += std::to_string(*it);
     }
     return s;
 }
 
-vector<int> getLongestPallindrome(vector<int> bits) {
+std::vector<int> getLongestPallindrome(std::vector<int> bits) {
     int n = bits.size();
     int start = 0, end = 0;
     for (int i = 0; i < n; i++) {
@@ -54,7 +53,7 @@ vector<int> getLongestPallindrome(vector<int> bits) {
             end = r - 1;
         }
     }
-    vector<int> result;
+    std::vector<int> result;
     for (int i = start; i <= end && i < n; i++) {
         result.push_back(result[i]);
     }

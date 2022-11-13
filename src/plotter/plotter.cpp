@@ -1,13 +1,11 @@
 #include "plotter.h"
 
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <vector>
 
 int main() {
     Plotter p;
 
-    vector<int> y = {1, 0, 1, -1, -1, 0, 1, 0, -1, 0, 1, 0};
+    std::vector<int> y = {1, 0, 1, -1, -1, 0, 1, 0, -1, 0, 1, 0};
 
     p.plot(y, "plotter.pdf");
     p.plot(y, "plotter.svg");

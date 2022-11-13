@@ -1,6 +1,4 @@
-#include <bits/stdc++.h>
-
-using namespace std;
+#include <vector>
 
 class Scrambler {
    private:
@@ -8,8 +6,8 @@ class Scrambler {
     Scrambler() {
     }
 
-    vector<int> B8ZS(vector<int> bits) {
-        vector<int> result;
+    std::vector<int> B8ZS(std::vector<int> bits) {
+        std::vector<int> result;
         int zc = 0;
         bool flag = true;
         for (auto x : bits) {
@@ -33,8 +31,8 @@ class Scrambler {
         return result;
     }
 
-    vector<int> HDB3(vector<int> bits) {
-        vector<int> result;
+    std::vector<int> HDB3(std::vector<int> bits) {
+        std::vector<int> result;
         int zc = 0;
         bool flag = true;
         bool prev = false;

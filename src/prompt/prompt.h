@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "./../decoder/decoder.h"
 #include "./../encoder/encoder.h"
@@ -8,23 +13,21 @@
 #include "./../scrambler/scrambler.h"
 #include "./../unscrambler/unscrambler.h"
 
-using namespace std;
-
-typedef vector<int> (Encoder::*FnPtrEncoder)(vector<int>);
-typedef vector<int> (Decoder::*FnPtrDecoder)(vector<int>);
-typedef vector<int> (Scrambler::*FnPtrScrambler)(vector<int>);
-typedef vector<int> (Unscrambler::*FnPtrUnscrambler)(vector<int>);
-typedef vector<int> (Generator::*FnPtrGenerator)(int, int);
-typedef vector<int> (Plotter::*FnPtrPlotter)(vector<int>);
+typedef std::vector<int> (Encoder::*FnPtrEncoder)(std::vector<int>);
+typedef std::vector<int> (Decoder::*FnPtrDecoder)(std::vector<int>);
+typedef std::vector<int> (Scrambler::*FnPtrScrambler)(std::vector<int>);
+typedef std::vector<int> (Unscrambler::*FnPtrUnscrambler)(std::vector<int>);
+typedef std::vector<int> (Generator::*FnPtrGenerator)(int, int);
+typedef std::vector<int> (Plotter::*FnPtrPlotter)(std::vector<int>);
 
 class Prompt {
    private:
-    map<int, pair<string, FnPtrEncoder>> encoding_scheme;
-    map<int, pair<string, FnPtrDecoder>> decoding_scheme;
-    map<int, pair<string, FnPtrScrambler>> scrambling_scheme;
-    map<int, pair<string, FnPtrUnscrambler>> unscrambling_scheme;
-    map<int, pair<string, FnPtrGenerator>> generating_scheme;
-    map<int, string> plotter_formats;
+    std::map<int, std::pair<std::string, FnPtrEncoder>> encoding_scheme;
+    std::map<int, std::pair<std::string, FnPtrDecoder>> decoding_scheme;
+    std::map<int, std::pair<std::string, FnPtrScrambler>> scrambling_scheme;
+    std::map<int, std::pair<std::string, FnPtrUnscrambler>> unscrambling_scheme;
+    std::map<int, std::pair<std::string, FnPtrGenerator>> generating_scheme;
+    std::map<int, std::string> plotter_formats;
 
    public:
     Prompt() {
@@ -58,47 +61,47 @@ class Prompt {
     }
 
     void run() {
-        cout << "Digital Data Encoder, Decoder and Scrambler with Data Generator and Graph Plotter:" << endl
-             << endl;
+        std::cout << "Digital Data Encoder, Decoder and Scrambler with Data Generator and Graph Plotter:" << std::endl
+                  << std::endl;
         handle_main();
-        cout << "Thanks for using this tool!" << endl;
+        std::cout << "Thanks for using this tool!" << std::endl;
     }
 
     void handle_main() {
         int choice;
         while (true) {
             choice = get_main();
-            cout << endl;
+            std::cout << std::endl;
             if (choice == 0) return;
             if (choice == 1) handle_encoder();
             if (choice == 2) handle_decoder();
             if (choice == 3) handle_generate();
             if (choice == 4) handle_plotter();
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
     int get_main() {
-        set<int> valid = {0, 1, 2, 3, 4};
+        std::set<int> valid = {0, 1, 2, 3, 4};
         int choice;
         while (true) {
-            cout << "Choose an option:" << endl;
-            cout << "1. Encode" << endl;
-            cout << "2. Decode" << endl;
-            cout << "3. Generate" << endl;
-            cout << "4. Plot" << endl;
-            cout << "0. Exit" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Choose an option:" << std::endl;
+            std::cout << "1. Encode" << std::endl;
+            std::cout << "2. Decode" << std::endl;
+            std::cout << "3. Generate" << std::endl;
+            std::cout << "4. Plot" << std::endl;
+            std::cout << "0. Exit" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (valid.find(choice) != valid.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
         return choice;
     }
 
     void handle_encoder() {
-        vector<int> bits;
+        std::vector<int> bits;
         bool custom = get_custom();
         if (custom) {
             bits = get_bits();
@@ -114,19 +117,19 @@ class Prompt {
                 scrambler = get_scrambler();
         }
         bool plotting = do_plotting();
-        pair<string, int> plotter = {"", 0};
+        std::pair<std::string, int> plotter = {"", 0};
         if (plotting)
             plotter = get_plotter();
-        vector<int> output_bits = execute_encoder(bits, encoder, scrambling, scrambler, plotting, plotter);
+        std::vector<int> output_bits = execute_encoder(bits, encoder, scrambling, scrambler, plotting, plotter);
         bool decoding = do_decoding();
         if (decoding) {
-            cout << endl;
+            std::cout << std::endl;
             handle_decoder(output_bits);
         }
     }
 
-    void handle_decoder(vector<int> input = {}) {
-        vector<int> bits;
+    void handle_decoder(std::vector<int> input = {}) {
+        std::vector<int> bits;
         if (input.size() == 0)
             bits = get_bits();
         else
@@ -142,7 +145,7 @@ class Prompt {
         execute_decoder(bits, decoder, unscrambling, unscrambler);
     }
 
-    vector<int> handle_generate(bool print = true) {
+    std::vector<int> handle_generate(bool print = true) {
         int generator = get_generator();
         int nbits = get_nbits();
         int consecutive = 0;
@@ -151,309 +154,309 @@ class Prompt {
         return execute_generator(generator, nbits, consecutive, print);
     }
 
-    void handle_plotter(vector<int> bits = {}) {
+    void handle_plotter(std::vector<int> bits = {}) {
         if (bits.size() == 0)
             bits = get_bits();
-        pair<string, int> plotter = get_plotter();
+        std::pair<std::string, int> plotter = get_plotter();
         execute_plotter(bits, plotter);
     }
 
-    vector<int> execute_encoder(vector<int> bits, int encoder, bool scrambling, int scrambler, bool plotting, pair<string, int> plotter) {
+    std::vector<int> execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, bool plotting, std::pair<std::string, int> plotter) {
         Encoder e;
         Scrambler s;
-        cout << "Encoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits, " ") << endl;
-        vector<int> output_bits;
+        std::cout << "Encoder Result:" << std::endl;
+        std::cout << "Input Bits: " << to_stringv(bits, " ") << std::endl;
+        std::vector<int> output_bits;
         if (!scrambling)
             output_bits = (e.*encoding_scheme[encoder].second)(bits);
         else
             output_bits = (s.*scrambling_scheme[scrambler].second)(bits);
-        cout << "Encoded Bits: " << to_stringv(output_bits, " ") << endl;
+        std::cout << "Encoded Bits: " << to_stringv(output_bits, " ") << std::endl;
         if (plotting) {
             execute_plotter(output_bits, plotter);
         }
-        cout << endl;
+        std::cout << std::endl;
         return output_bits;
     }
 
-    void execute_decoder(vector<int> bits, int decoder, bool unscrambling, int unscrambler) {
+    void execute_decoder(std::vector<int> bits, int decoder, bool unscrambling, int unscrambler) {
         Decoder d;
         Unscrambler u;
-        cout << "Decoder Result:" << endl;
-        cout << "Input Bits: " << to_stringv(bits, " ") << endl;
-        vector<int> output_bits;
+        std::cout << "Decoder Result:" << std::endl;
+        std::cout << "Input Bits: " << to_stringv(bits, " ") << std::endl;
+        std::vector<int> output_bits;
         if (!unscrambling)
             output_bits = (d.*decoding_scheme[decoder].second)(bits);
         else
             output_bits = (u.*unscrambling_scheme[unscrambler].second)(bits);
-        cout << "Decoded Bits: " << to_stringv(output_bits, " ") << endl;
+        std::cout << "Decoded Bits: " << to_stringv(output_bits, " ") << std::endl;
     }
 
-    vector<int> execute_generator(int generator, int nbits, int consecutive, bool print) {
+    std::vector<int> execute_generator(int generator, int nbits, int consecutive, bool print) {
         Generator g;
-        vector<int> bits = (g.*generating_scheme[generator].second)(nbits, consecutive);
+        std::vector<int> bits = (g.*generating_scheme[generator].second)(nbits, consecutive);
         if (print) {
-            cout << "Generator Result:" << endl;
-            cout << "Generated Bits: " << to_stringv(bits, " ") << endl;
+            std::cout << "Generator Result:" << std::endl;
+            std::cout << "Generated Bits: " << to_stringv(bits, " ") << std::endl;
         }
         return bits;
     }
 
-    void execute_plotter(vector<int> bits, pair<string, int> plotter) {
+    void execute_plotter(std::vector<int> bits, std::pair<std::string, int> plotter) {
         Plotter p;
-        string fullname = plotter.first + "." + plotter_formats[plotter.second];
+        std::string fullname = plotter.first + "." + plotter_formats[plotter.second];
         p.plot(bits, fullname);
-        cout << "Plot saved successfully!" << endl;
+        std::cout << "Plot saved successfully!" << std::endl;
     }
 
     bool get_custom() {
         int choice;
         while (true) {
-            cout << "Choose the input data source?" << endl;
-            cout << "1. Custom" << endl;
-            cout << "2. Generator" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Choose the input data source?" << std::endl;
+            std::cout << "1. Custom" << std::endl;
+            std::cout << "2. Generator" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (choice == 1 || choice == 2) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice == 1;
     }
 
-    vector<int> get_bits() {
+    std::vector<int> get_bits() {
         int n;
         while (true) {
-            cout << "Enter No. of Values (n):" << endl;
-            cout << ">> ";
-            cin >> n;
+            std::cout << "Enter No. of Values (n):" << std::endl;
+            std::cout << ">> ";
+            std::cin >> n;
             if (n > 0) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        vector<int> v;
+        std::vector<int> v;
         while (n--) {
             int x;
-            cout << "    >> ";
-            cin >> x;
+            std::cout << "    >> ";
+            std::cin >> x;
             v.push_back(x);
         }
-        cout << endl;
+        std::cout << std::endl;
         return v;
     }
 
     int get_encoder() {
         int choice;
         while (true) {
-            cout << "Choose an encoder:" << endl;
+            std::cout << "Choose an encoder:" << std::endl;
             for (auto x : encoding_scheme) {
-                cout << x.first << ". " << x.second.first << endl;
+                std::cout << x.first << ". " << x.second.first << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (encoding_scheme.find(choice) != encoding_scheme.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 
     int get_decoder() {
         int choice;
         while (true) {
-            cout << "Choose a decoder:" << endl;
+            std::cout << "Choose a decoder:" << std::endl;
             for (auto x : decoding_scheme) {
-                cout << x.first << ". " << x.second.first << endl;
+                std::cout << x.first << ". " << x.second.first << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (decoding_scheme.find(choice) != decoding_scheme.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 
     bool do_scrambling() {
         int choice;
         while (true) {
-            cout << "Do you want to scramble the data?" << endl;
-            cout << "1. Yes" << endl;
-            cout << "2. No" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Do you want to scramble the data?" << std::endl;
+            std::cout << "1. Yes" << std::endl;
+            std::cout << "2. No" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (choice == 1 || choice == 2) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice == 1;
     }
 
     int get_scrambler() {
         int choice;
         while (true) {
-            cout << "Choose a scrambler:" << endl;
+            std::cout << "Choose a scrambler:" << std::endl;
             for (auto x : scrambling_scheme) {
-                cout << x.first << ". " << x.second.first << endl;
+                std::cout << x.first << ". " << x.second.first << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (scrambling_scheme.find(choice) != scrambling_scheme.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 
     bool do_unscrambling() {
         int choice;
         while (true) {
-            cout << "Is the data scrambled?" << endl;
-            cout << "1. Yes" << endl;
-            cout << "2. No" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Is the data scrambled?" << std::endl;
+            std::cout << "1. Yes" << std::endl;
+            std::cout << "2. No" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (choice == 1 || choice == 2) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice == 1;
     }
 
     int get_unscrambler() {
         int choice;
         while (true) {
-            cout << "Choose an unscrambler:" << endl;
+            std::cout << "Choose an unscrambler:" << std::endl;
             for (auto x : unscrambling_scheme) {
-                cout << x.first << ". " << x.second.first << endl;
+                std::cout << x.first << ". " << x.second.first << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (unscrambling_scheme.find(choice) != unscrambling_scheme.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 
     int get_generator() {
         int choice;
         while (true) {
-            cout << "Choose a generator:" << endl;
+            std::cout << "Choose a generator:" << std::endl;
             for (auto x : generating_scheme) {
-                cout << x.first << ". " << x.second.first << endl;
+                std::cout << x.first << ". " << x.second.first << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (generating_scheme.find(choice) != generating_scheme.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 
     int get_nbits() {
         int n;
         while (true) {
-            cout << "Enter No. of Values (n):" << endl;
-            cout << ">> ";
-            cin >> n;
+            std::cout << "Enter No. of Values (n):" << std::endl;
+            std::cout << ">> ";
+            std::cin >> n;
             if (n > 0) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return n;
     }
 
     int get_consecutive(int n) {
         int consecutive;
         while (true) {
-            cout << "Enter No. of Consecutive Values:" << endl;
-            cout << ">> ";
-            cin >> consecutive;
+            std::cout << "Enter No. of Consecutive Values:" << std::endl;
+            std::cout << ">> ";
+            std::cin >> consecutive;
             if (consecutive > 0 && consecutive <= n) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return consecutive;
     }
 
     bool do_plotting() {
         int choice;
         while (true) {
-            cout << "Do you want to plot the data?" << endl;
-            cout << "1. Yes" << endl;
-            cout << "2. No" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Do you want to plot the data?" << std::endl;
+            std::cout << "1. Yes" << std::endl;
+            std::cout << "2. No" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (choice == 1 || choice == 2) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice == 1;
     }
 
     bool do_decoding() {
         int choice;
         while (true) {
-            cout << "Do you want to decode the output data?" << endl;
-            cout << "1. Yes" << endl;
-            cout << "2. No" << endl;
-            cout << ">> ";
-            cin >> choice;
+            std::cout << "Do you want to decode the output data?" << std::endl;
+            std::cout << "1. Yes" << std::endl;
+            std::cout << "2. No" << std::endl;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (choice == 1 || choice == 2) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
         return choice == 1;
     }
 
-    pair<string, int> get_plotter() {
-        string filename = get_filename();
+    std::pair<std::string, int> get_plotter() {
+        std::string filename = get_filename();
         int fileformat = get_fileformat();
         return {filename, fileformat};
     }
 
-    string get_filename() {
-        string filename;
-        cin.ignore();
+    std::string get_filename() {
+        std::string filename;
+        std::cin.ignore();
         while (true) {
-            cout << "Enter a filename:" << endl;
-            cout << ">> ";
-            getline(cin, filename);
+            std::cout << "Enter a filename:" << std::endl;
+            std::cout << ">> ";
+            getline(std::cin, filename);
             if (filename.size() > 0) break;
-            cout << "Enter a valid filename!" << endl
-                 << endl;
+            std::cout << "Enter a valid filename!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return filename;
     }
 
     int get_fileformat() {
         int choice;
         while (true) {
-            cout << "Choose an output format:" << endl;
+            std::cout << "Choose an output format:" << std::endl;
             for (auto x : plotter_formats) {
-                cout << x.first << ". " << x.second << endl;
+                std::cout << x.first << ". " << x.second << std::endl;
             }
-            cout << ">> ";
-            cin >> choice;
+            std::cout << ">> ";
+            std::cin >> choice;
             if (plotter_formats.find(choice) != plotter_formats.end()) break;
-            cout << "Enter a valid choice!" << endl
-                 << endl;
+            std::cout << "Enter a valid choice!" << std::endl
+                      << std::endl;
         }
-        cout << endl;
+        std::cout << std::endl;
         return choice;
     }
 };

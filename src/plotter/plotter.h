@@ -1,9 +1,6 @@
-#include <bits/stdc++.h>
-
 #include <sciplot/sciplot.hpp>
-
-using namespace std;
-using namespace sciplot;
+#include <string>
+#include <vector>
 
 class Plotter {
    private:
@@ -11,17 +8,17 @@ class Plotter {
     Plotter() {
     }
 
-    void plot(vector<int> y, string filename, int width = -1, int height = -1) {
-        vector<float> yf(y.begin(), y.end());
+    void plot(std::vector<int> y, std::string filename, int width = -1, int height = -1) {
+        std::vector<float> yf(y.begin(), y.end());
         plot(yf, filename, width, height);
     }
 
-    void plot(vector<float> y, string filename, int width = -1, int height = -1) {
+    void plot(std::vector<float> y, std::string filename, int width = -1, int height = -1) {
         int n = y.size();
         float mini = *min_element(y.begin(), y.end());
         float maxi = *max_element(y.begin(), y.end());
 
-        Plot2D plot;
+        sciplot::Plot2D plot;
 
         plot.xlabel("Time");
         plot.ylabel("Voltage");
@@ -34,18 +31,18 @@ class Plotter {
         plot.xrange(x_min, x_max);
         plot.yrange(y_min, y_max);
 
-        Vec base_x = linspace(x_min, x_max, 1);
-        Vec base_y = linspace(0, 0, 1);
+        sciplot::Vec base_x = sciplot::linspace(x_min, x_max, 1);
+        sciplot::Vec base_y = sciplot::linspace(0, 0, 1);
         plot.drawCurve(base_x, base_y).lineColor("grey");
 
-        vector<float> x(n, 0.5);
+        std::vector<float> x(n, 0.5);
         for (int i = 0; i < n; i++)
             x[i] += i;
 
         plot.drawStepsHistogram(x, y).lineColor("red");
 
-        Figure fig = {{plot}};
-        Canvas canvas = {{fig}};
+        sciplot::Figure fig = {{plot}};
+        sciplot::Canvas canvas = {{fig}};
         if (width != -1 && height != -1)
             canvas.size(width, height);
         canvas.save(filename);
