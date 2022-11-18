@@ -43,7 +43,8 @@ void Plotter::plot(std::vector<float> y, std::string filename, int width, int he
 
     sciplot::Figure fig = {{plot}};
     sciplot::Canvas canvas = {{fig}};
-    if (width != -1 && height != -1)
-        canvas.size(width, height);
+    width = width == -1 ? 500 + 300 * y.size() : width;
+    height = height == -1 ? 500 : height;
+    canvas.size(width, height);
     canvas.save(filename);
 }
