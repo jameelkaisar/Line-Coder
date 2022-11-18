@@ -36,10 +36,10 @@ class Prompt {
     void handle_decoder(std::vector<int> input = {});
     std::vector<int> handle_generate(bool print = true);
     void handle_plotter(std::vector<int> bits = {});
-    std::vector<int> execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, bool plotting, std::pair<std::string, int> plotter);
+    std::vector<int> execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, int plotting, std::pair<std::string, int> plotter);
     void execute_decoder(std::vector<int> bits, int decoder, bool unscrambling, int unscrambler);
     std::vector<int> execute_generator(int generator, int nbits, int consecutive, bool print);
-    void execute_plotter(std::vector<int> bits, std::pair<std::string, int> plotter);
+    void execute_plotter(std::vector<int> bits, int plotting, std::pair<std::string, int> plotter);
     bool get_custom();
     std::vector<int> get_bits();
     int get_encoder();
@@ -51,7 +51,7 @@ class Prompt {
     int get_generator();
     int get_nbits();
     int get_consecutive(int n);
-    bool do_plotting();
+    int do_plotting(bool required = false);
     bool do_decoding();
     std::pair<std::string, int> get_plotter();
     std::string get_filename();
@@ -149,9 +149,9 @@ void Prompt::handle_encoder() {
         if (scrambling)
             scrambler = get_scrambler();
     }
-    bool plotting = do_plotting();
+    int plotting = do_plotting();
     std::pair<std::string, int> plotter = {"", 0};
-    if (plotting)
+    if (plotting == 2 || plotting == 3)
         plotter = get_plotter();
     std::vector<int> output_bits = execute_encoder(bits, encoder, scrambling, scrambler, plotting, plotter);
     bool decoding = do_decoding();
@@ -191,10 +191,10 @@ void Prompt::handle_plotter(std::vector<int> bits) {
     if (bits.size() == 0)
         bits = get_bits();
     std::pair<std::string, int> plotter = get_plotter();
-    execute_plotter(bits, plotter);
+    execute_plotter(bits, 4, plotter);
 }
 
-std::vector<int> Prompt::execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, bool plotting, std::pair<std::string, int> plotter) {
+std::vector<int> Prompt::execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, int plotting, std::pair<std::string, int> plotter) {
     Encoder e;
     Scrambler s;
     std::cout << "Encoder Result:" << std::endl;
@@ -205,9 +205,7 @@ std::vector<int> Prompt::execute_encoder(std::vector<int> bits, int encoder, boo
     else
         output_bits = (s.*scrambling_scheme[scrambler].second)(bits);
     std::cout << "Encoded Bits: " << to_stringv(output_bits, " ") << std::endl;
-    if (plotting) {
-        execute_plotter(output_bits, plotter);
-    }
+    execute_plotter(output_bits, plotting, plotter);
     std::cout << std::endl;
     return output_bits;
 }
@@ -235,11 +233,14 @@ std::vector<int> Prompt::execute_generator(int generator, int nbits, int consecu
     return bits;
 }
 
-void Prompt::execute_plotter(std::vector<int> bits, std::pair<std::string, int> plotter) {
+void Prompt::execute_plotter(std::vector<int> bits, int plotting, std::pair<std::string, int> plotter) {
     Plotter p;
     std::string fullname = plotter.first + "." + plotter_formats[plotter.second];
-    p.plot(bits, fullname);
-    std::cout << "Plot saved successfully!" << std::endl;
+    if (plotting == 1 || plotting == 3)
+        p.plot(bits, true);
+    if (plotting == 2 || plotting == 3)
+        p.plot(bits, false, fullname);
+    std::cout << "Plotting operation success!" << std::endl;
 }
 
 bool Prompt::get_custom() {
@@ -424,20 +425,22 @@ int Prompt::get_consecutive(int n) {
     return consecutive;
 }
 
-bool Prompt::do_plotting() {
+int Prompt::do_plotting(bool required) {
     int choice;
     while (true) {
-        std::cout << "Do you want to plot the data?" << std::endl;
-        std::cout << "1. Yes" << std::endl;
-        std::cout << "2. No" << std::endl;
+        std::cout << "Choose an option to plot the data?" << std::endl;
+        std::cout << "1. Show only" << std::endl;
+        std::cout << "2. Save only" << std::endl;
+        std::cout << "3. Show and save" << std::endl;
+        if (!required) std::cout << "4. Skip plotting" << std::endl;
         std::cout << ">> ";
         std::cin >> choice;
-        if (choice == 1 || choice == 2) break;
+        if (choice == 1 || choice == 2 || choice == 3 || (!required && choice == 4)) break;
         std::cout << "Enter a valid choice!" << std::endl
                   << std::endl;
     }
     std::cout << std::endl;
-    return choice == 1;
+    return choice;
 }
 
 bool Prompt::do_decoding() {

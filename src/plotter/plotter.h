@@ -4,16 +4,16 @@
 
 class Plotter {
    public:
-    void plot(std::vector<int> y, std::string filename, int width = -1, int height = -1);
-    void plot(std::vector<float> y, std::string filename, int width = -1, int height = -1);
+    void plot(std::vector<int> y, bool show=true, std::string filename="", int width = -1, int height = -1);
+    void plot(std::vector<float> y, bool show=true, std::string filename="", int width = -1, int height = -1);
 };
 
-void Plotter::plot(std::vector<int> y, std::string filename, int width, int height) {
+void Plotter::plot(std::vector<int> y, bool show, std::string filename, int width, int height) {
     std::vector<float> yf(y.begin(), y.end());
-    plot(yf, filename, width, height);
+    plot(yf, show, filename, width, height);
 }
 
-void Plotter::plot(std::vector<float> y, std::string filename, int width, int height) {
+void Plotter::plot(std::vector<float> y, bool show, std::string filename, int width, int height) {
     int n = y.size();
     float mini = *min_element(y.begin(), y.end());
     float maxi = *max_element(y.begin(), y.end());
@@ -46,5 +46,6 @@ void Plotter::plot(std::vector<float> y, std::string filename, int width, int he
     width = width == -1 ? 500 + 300 * y.size() : width;
     height = height == -1 ? 500 : height;
     canvas.size(width, height);
-    canvas.save(filename);
+    if (show) canvas.show();
+    else canvas.save(filename);
 }
