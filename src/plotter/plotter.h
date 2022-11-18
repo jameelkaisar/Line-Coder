@@ -1,11 +1,12 @@
+#include <algorithm>
 #include <sciplot/sciplot.hpp>
 #include <string>
 #include <vector>
 
 class Plotter {
    public:
-    void plot(std::vector<int> y, bool show=true, std::string filename="", int width = -1, int height = -1);
-    void plot(std::vector<float> y, bool show=true, std::string filename="", int width = -1, int height = -1);
+    void plot(std::vector<int> y, bool show = true, std::string filename = "", int width = -1, int height = -1);
+    void plot(std::vector<float> y, bool show = true, std::string filename = "", int width = -1, int height = -1);
 };
 
 void Plotter::plot(std::vector<int> y, bool show, std::string filename, int width, int height) {
@@ -26,8 +27,8 @@ void Plotter::plot(std::vector<float> y, bool show, std::string filename, int wi
 
     float x_min = 0;
     float x_max = n;
-    float y_min = mini - 0.1;
-    float y_max = maxi + 0.1;
+    float y_min = std::min((float)-1, mini) - 0.1;
+    float y_max = std::max((float)1, maxi) + 0.1;
     plot.xrange(x_min, x_max);
     plot.yrange(y_min, y_max);
 
@@ -46,6 +47,8 @@ void Plotter::plot(std::vector<float> y, bool show, std::string filename, int wi
     width = width == -1 ? 500 + 300 * y.size() : width;
     height = height == -1 ? 500 : height;
     canvas.size(width, height);
-    if (show) canvas.show();
-    else canvas.save(filename);
+    if (show)
+        canvas.show();
+    else
+        canvas.save(filename);
 }
