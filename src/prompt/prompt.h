@@ -190,8 +190,11 @@ std::vector<int> Prompt::handle_generate(bool print) {
 void Prompt::handle_plotter(std::vector<int> bits) {
     if (bits.size() == 0)
         bits = get_bits();
-    std::pair<std::string, int> plotter = get_plotter();
-    execute_plotter(bits, 4, plotter);
+    int plotting = do_plotting(true);
+    std::pair<std::string, int> plotter = {"", 0};
+    if (plotting == 2 || plotting == 3)
+        plotter = get_plotter();
+    execute_plotter(bits, plotting, plotter);
 }
 
 std::vector<int> Prompt::execute_encoder(std::vector<int> bits, int encoder, bool scrambling, int scrambler, int plotting, std::pair<std::string, int> plotter) {
