@@ -5,7 +5,7 @@ Line encoder, decoder and scrambler with digital data generator and graph plotte
 - Install gnuplot
 ```
 sudo apt update
-sudo apt install gnuplot-nox
+sudo apt install gnuplot-x11
 ```
 
 - Install sciplot
@@ -15,6 +15,11 @@ cd sciplot
 mkdir build && cd build
 cmake ..
 sudo cmake --build . --target install
+```
+
+- Install adwaita theme (For WSL only)
+```
+sudo apt install adwaita-icon-theme-full
 ```
 
 ## Usage

@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install gnuplot
-      run: sudo apt install gnuplot-nox
+      run: sudo apt install gnuplot-x11
     
     - name: Install sciplot
       run: git clone https://github.com/sciplot/sciplot --recursive &&
