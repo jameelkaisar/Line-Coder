@@ -29,3 +29,8 @@ cd Line-Coder
 g++ -std=c++17 main.cpp -o main.out
 ./main.out
 ```
+
+## Assumptions
+- All schemes are implemented using positive logic.
+- Manchester encoding uses IEEE (802.3) convention.
+- It is assumed that the user will give binary data to the encoder.
