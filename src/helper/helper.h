@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -32,30 +33,40 @@ std::string to_stringv(const std::vector<T>& vec, std::string delim) {
 
 std::vector<int> getLongestPallindrome(std::vector<int> bits) {
     int n = bits.size();
-    int start = 0, end = 0;
+    int new_n = 2 * n + 1;
+    std::vector<int> new_bits = std::vector<int>(new_n, -2);
     for (int i = 0; i < n; i++) {
-        int l = i, r = i;
-        while (l >= 0 && r < n && bits[l] == bits[r]) {
-            l--;
-            r++;
+        new_bits[2 * i + 1] = bits[i];
+    }
+    std::vector<int> pal(new_n);
+    int center = 0, right = 0;
+    int longest_length = 0, longest_center = 0;
+    for (int i = 0; i < new_n; i++) {
+        int mirror = 2 * center - i;
+        if (right > i) {
+            pal[i] = std::min(pal[mirror], right - i);
         }
-        if (r - l - 1 > end - start + 1) {
-            start = l + 1;
-            end = r - 1;
+        int a = i + (pal[i] + 1);
+        int b = i - (pal[i] + 1);
+        while (b >= 0 && a < new_n && new_bits[a] == new_bits[b]) {
+            b--;
+            a++;
+            pal[i]++;
         }
-        l = i, r = i + 1;
-        while (l >= 0 && r < n && bits[l] == bits[r]) {
-            l--;
-            r++;
+        if (pal[i] >= longest_length) {
+            longest_center = i;
+            longest_length = pal[i];
         }
-        if (r - l - 1 > end - start + 1) {
-            start = l + 1;
-            end = r - 1;
+        if (i + pal[i] > right) {
+            center = i;
+            right = i + pal[i];
         }
     }
     std::vector<int> result;
-    for (int i = start; i <= end && i < n; i++) {
-        result.push_back(result[i]);
+    for (int i = longest_center - longest_length; i <= longest_center + longest_length; i++) {
+        if (new_bits[i] != -2) {
+            result.push_back(new_bits[i]);
+        }
     }
     return result;
 }
