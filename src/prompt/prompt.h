@@ -208,6 +208,7 @@ std::vector<int> Prompt::execute_encoder(std::vector<int> bits, int encoder, boo
     else
         output_bits = (s.*scrambling_scheme[scrambler].second)(bits);
     std::cout << "Encoded Bits: " << to_stringv(output_bits, " ") << std::endl;
+    std::cout << "Longest Palindrome: " << to_stringv(getLongestPallindrome(output_bits), " ") << std::endl;
     execute_plotter(output_bits, plotting, plotter);
     std::cout << std::endl;
     return output_bits;
@@ -224,6 +225,7 @@ void Prompt::execute_decoder(std::vector<int> bits, int decoder, bool unscrambli
     else
         output_bits = (u.*unscrambling_scheme[unscrambler].second)(bits);
     std::cout << "Decoded Bits: " << to_stringv(output_bits, " ") << std::endl;
+    std::cout << "Longest Palindrome: " << to_stringv(getLongestPallindrome(output_bits), " ") << std::endl;
 }
 
 std::vector<int> Prompt::execute_generator(int generator, int nbits, int consecutive, bool print) {
@@ -232,6 +234,7 @@ std::vector<int> Prompt::execute_generator(int generator, int nbits, int consecu
     if (print) {
         std::cout << "Generator Result:" << std::endl;
         std::cout << "Generated Bits: " << to_stringv(bits, " ") << std::endl;
+        std::cout << "Longest Palindrome: " << to_stringv(getLongestPallindrome(bits), " ") << std::endl;
     }
     return bits;
 }
