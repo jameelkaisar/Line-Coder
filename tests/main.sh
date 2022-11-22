@@ -1,1 +1,2 @@
-./tests/header.sh
+./tests/compilation.sh
+./tests/assertions.sh
