@@ -7,7 +7,6 @@
 #include "./../src/encoder/encoder.h"
 #include "./../src/generator/generator.h"
 #include "./../src/helper/helper.h"
-#include "./../src/plotter/plotter.h"
 #include "./../src/scrambler/scrambler.h"
 #include "./../src/unscrambler/unscrambler.h"
 
