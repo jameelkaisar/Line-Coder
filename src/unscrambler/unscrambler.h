@@ -17,17 +17,19 @@ std::vector<int> Unscrambler::B8ZS(std::vector<int> bits) {
             if (expect != (bits[i] > 0)) {
                 count++;
             }
+            expect = bits[i] < 0;
             if (count == 2) {
+                if (i + 1 < n) {
+                    expect = bits[i + 1] < 0;
+                    bits[i + 1] = 0;
+                }
                 result[i] = 0;
-                if (i - 1 >= 0)
-                    result[i - 1] = 0;
+                if (i - 2 >= 0)
+                    result[i - 2] = 0;
                 if (i - 3 >= 0)
                     result[i - 3] = 0;
-                if (i - 4 >= 0)
-                    result[i - 4] = 0;
                 count = 0;
             }
-            expect = bits[i] < 0;
         } else {
             result.push_back(0);
         }

@@ -21,10 +21,10 @@ std::vector<int> Scrambler::B8ZS(std::vector<int> bits) {
         }
         if (zc == 8) {
             int n = result.size();
-            result[n - 5] = flag ? 1 : -1;
-            result[n - 4] = flag ? -1 : 1;
-            result[n - 2] = flag ? -1 : 1;
-            result[n - 1] = flag ? 1 : -1;
+            result[n - 5] = flag ? -1 : 1;
+            result[n - 4] = flag ? 1 : -1;
+            result[n - 2] = flag ? 1 : -1;
+            result[n - 1] = flag ? -1 : 1;
             zc = 0;
         }
     }
